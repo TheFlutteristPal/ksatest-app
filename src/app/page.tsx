@@ -13,7 +13,8 @@ import useLocalStorage from '@/hooks/use-local-storage';
 import { Progress } from "@/components/ui/progress";
 import { HistoryDisplay } from '@/components/history/HistoryDisplay';
 
-const PING_SAMPLES = 10; // Increased from 5
+const PING_SAMPLES = 10; 
+const INTER_PING_DELAY_MS = 50; // Delay between ping samples
 const CLOUDFLARE_SPEED_TEST_BASE_URL = 'https://speed.cloudflare.com';
 
 export default function SpeedTestPage() {
@@ -69,7 +70,7 @@ export default function SpeedTestPage() {
     const basePingUrl = `${CLOUDFLARE_SPEED_TEST_BASE_URL}/__down?bytes=0`;
 
     for (let i = 0; i < PING_SAMPLES; i++) {
-      const pingUrlWithCacheBuster = `${basePingUrl}&_=${Date.now()}-${i}`; // Unique cache buster for each request
+      const pingUrlWithCacheBuster = `${basePingUrl}&_=${Date.now()}-${i}`; 
       const startTime = performance.now();
       try {
         await fetch(pingUrlWithCacheBuster, {cache: 'no-store', mode: 'cors'});
@@ -77,18 +78,23 @@ export default function SpeedTestPage() {
         console.warn(`Ping sample ${i + 1} failed:`, e);
       }
       totalTime += performance.now() - startTime;
-      setTestProgress(Math.round(((i + 1) / PING_SAMPLES) * 15)); // Ping contributes up to 15%
+      setTestProgress(Math.round(((i + 1) / PING_SAMPLES) * 15)); 
+      
+      // Add a small delay between pings, but not after the last one
+      if (i < PING_SAMPLES - 1) {
+        await new Promise(resolve => setTimeout(resolve, INTER_PING_DELAY_MS));
+      }
     }
     const avgPing = Math.round(totalTime / PING_SAMPLES);
     setPing(avgPing);
-    setTestProgress(15); // Ping complete
+    setTestProgress(15); 
     return avgPing;
   };
 
   const measureDownloadSpeed = async (fileSizeMB: number) => {
     setCurrentTestPhase(t('download'));
     setDownloadProgress(0);
-    setTestProgress(15); // Start download phase
+    setTestProgress(15); 
     
     const fileSizeInBytes = fileSizeMB * 1024 * 1024;
     const downloadUrl = `${CLOUDFLARE_SPEED_TEST_BASE_URL}/__down?bytes=${fileSizeInBytes}&_=${Date.now()}`;
@@ -110,7 +116,6 @@ export default function SpeedTestPage() {
         receivedLength += value.length;
         const progress = (receivedLength / fileSizeInBytes) * 100;
         setDownloadProgress(Math.min(100, progress));
-        // Download phase contributes from 15% to 55% (40% total)
         setTestProgress(15 + Math.round(progress * 0.40)); 
       }
     } catch (error) {
@@ -131,38 +136,34 @@ export default function SpeedTestPage() {
     const speedMbps = parseFloat((speedBps / (1024 * 1024)).toFixed(2));
     setDownloadSpeed(speedMbps);
     setDownloadProgress(100);
-    setTestProgress(55); // Download complete
+    setTestProgress(55); 
     return speedMbps;
   };
 
   const measureUploadSpeed = async (fileSizeMB: number) => {
     setCurrentTestPhase(t('upload'));
     setUploadProgress(0);
-    // Upload phase starts after download (55%)
     setTestProgress(55);
 
-    // Simulate upload by animating progress
-    const totalSteps = 20; // Number of animation steps
-    // Make duration somewhat proportional to file size for simulation feel
-    let stepDuration = 50; // ms per step for 1MB, 20 steps = 1s
-    if (fileSizeMB === 5) stepDuration = 60; // ~1.2s
-    else if (fileSizeMB === 10) stepDuration = 75; // ~1.5s
-    else if (fileSizeMB === 50) stepDuration = 125; // ~2.5s
-    else if (fileSizeMB === 100) stepDuration = 175; // ~3.5s
+    const totalSteps = 20; 
+    let stepDuration = 50; 
+    if (fileSizeMB === 5) stepDuration = 60; 
+    else if (fileSizeMB === 10) stepDuration = 75; 
+    else if (fileSizeMB === 50) stepDuration = 125; 
+    else if (fileSizeMB === 100) stepDuration = 175; 
 
     for (let i = 1; i <= totalSteps; i++) {
       await new Promise(resolve => setTimeout(resolve, stepDuration));
       const progress = (i / totalSteps) * 100;
       setUploadProgress(progress);
-      setUploadSpeed(parseFloat((Math.random() * 40 + 5).toFixed(2))); // Simulated speed
-      // Upload contributes from 55% to 100% (45% total)
+      setUploadSpeed(parseFloat((Math.random() * 40 + 5).toFixed(2))); 
       setTestProgress(55 + Math.round(progress * 0.45));
     }
     
-    const finalSpeed = parseFloat((Math.random() * 40 + 5).toFixed(2)); // Simulate a final speed
+    const finalSpeed = parseFloat((Math.random() * 40 + 5).toFixed(2)); 
     setUploadSpeed(finalSpeed);
     setUploadProgress(100);
-    setTestProgress(100); // Upload complete
+    setTestProgress(100); 
     return finalSpeed;
   };
 
@@ -179,14 +180,14 @@ export default function SpeedTestPage() {
 
     let measuredPing = 0;
     let measuredDownloadSpeed = 0;
-    let measuredUploadSpeed = 0; // Simulated
+    let measuredUploadSpeed = 0; 
 
     try {
       measuredPing = await measurePing();
-      await new Promise(resolve => setTimeout(resolve, 300)); // Small delay between phases
+      await new Promise(resolve => setTimeout(resolve, 300)); 
       measuredDownloadSpeed = await measureDownloadSpeed(selectedFileSize);
-      await new Promise(resolve => setTimeout(resolve, 300)); // Small delay between phases
-      measuredUploadSpeed = await measureUploadSpeed(selectedFileSize); // This is simulated
+      await new Promise(resolve => setTimeout(resolve, 300)); 
+      measuredUploadSpeed = await measureUploadSpeed(selectedFileSize); 
       
       const newResult: SpeedTestResult = {
         id: new Date().toISOString(),
@@ -203,7 +204,6 @@ export default function SpeedTestPage() {
 
     } catch (error) {
       console.error("Speed test failed:", error);
-      // Optionally, display an error message to the user
     } finally {
       setIsTesting(false);
       setCurrentTestPhase(t('testComplete') || 'Test Complete');
@@ -230,10 +230,10 @@ export default function SpeedTestPage() {
         <div className="my-4">
           <Progress 
             value={
-              currentTestPhase === t('ping') ? testProgress : // Ping uses overall testProgress for its phase
+              currentTestPhase === t('ping') ? testProgress : 
               currentTestPhase === t('download') ? downloadProgress : 
               currentTestPhase === t('upload') ? uploadProgress : 
-              testProgress // Fallback to overall testProgress
+              testProgress 
             } 
             className="w-full h-3 [&>div]:bg-accent" 
           />
