@@ -50,7 +50,7 @@ export function HistoryDisplay({ history, onClearHistory }: HistoryDisplayProps)
                 <TableHead><CalendarDays className="inline-block mr-1 h-4 w-4" />{t('date')}</TableHead>
                 <TableHead className="text-center"><Download className="inline-block mr-1 h-4 w-4" />{t('download')} ({t('mbps')})</TableHead>
                 <TableHead className="text-center"><Upload className="inline-block mr-1 h-4 w-4" />{t('upload')} ({t('mbps')})</TableHead>
-                <TableHead className="text-center"><PingIcon className="inline-block mr-1 h-4 w-4" />{t('ping')} ({t('ms')})</TableHead>
+                <TableHead className="text-center"><PingIcon className="inline-block mr-1 h-4 w-4" />{t('idleLatency')} ({t('ms')})</TableHead> 
                 <TableHead className="text-center"><FileBox className="inline-block mr-1 h-4 w-4" />{t('fileSize')} (MB)</TableHead>
                 <TableHead><Wifi className="inline-block mr-1 h-4 w-4" />{t('isp')}</TableHead>
                 <TableHead><Server className="inline-block mr-1 h-4 w-4" />{t('server')}</TableHead>
@@ -62,7 +62,7 @@ export function HistoryDisplay({ history, onClearHistory }: HistoryDisplayProps)
                   <TableCell>{formatDate(result.timestamp)}</TableCell>
                   <TableCell className="text-center font-medium text-primary">{result.downloadSpeed}</TableCell>
                   <TableCell className="text-center font-medium text-primary">{result.uploadSpeed}</TableCell>
-                  <TableCell className="text-center font-medium text-primary">{result.ping}</TableCell>
+                  <TableCell className="text-center font-medium text-primary">{result.idleLatency}</TableCell> 
                   <TableCell className="text-center">{result.fileSize}</TableCell>
                   <TableCell>{result.isp || "N/A"}</TableCell>
                   <TableCell>{result.serverLocation || "N/A"}</TableCell>

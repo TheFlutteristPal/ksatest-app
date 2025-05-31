@@ -4,13 +4,12 @@ import type { Language, Translations } from '@/types';
 export const translations: Translations = {
   appName: { en: 'ksatest', ar: 'ksatest' },
   speedTest: { en: 'Speed Test', ar: 'اختبار السرعة' },
-  // history: { en: 'History', ar: 'السجل' }, // History is on main page
   networkingTerms: { en: 'Networking Terms', ar: 'مصطلحات الشبكات' },
   telecomBands: { en: 'Telecom Bands', ar: 'نطاقات الاتصالات' },
   settings: { en: 'Settings', ar: 'الإعدادات' },
   download: { en: 'Download', ar: 'التحميل' },
   upload: { en: 'Upload', ar: 'الرفع' },
-  ping: { en: 'Ping', ar: 'البنق' },
+  idleLatency: { en: 'Idle Latency', ar: 'زمن الاستجابة (الخمول)' }, // Changed from ping
   mbps: { en: 'Mbps', ar: ' ميجابت/ثانية' },
   ms: { en: 'ms', ar: 'مللي ثانية' },
   selectFileSize: { en: 'Select File Size (MB)', ar: 'اختر حجم الملف (ميجابايت)' },
@@ -44,7 +43,6 @@ export const translations: Translations = {
   unavailableServer: { en: 'Server location unavailable', ar: 'موقع الخادم غير متوفر' },
   unavailableIpv4Address: { en: 'IPv4 unavailable', ar: 'IPv4 غير متوفر' },
   testComplete: { en: 'Test Complete', ar: 'اكتمل الاختبار' },
-  // realTestNotice: { en: 'This test performs real data transfers to measure speed. Data usage will occur.', ar: 'يقوم هذا الاختبار بعمليات نقل بيانات حقيقية لقياس السرعة. سيتم استهلاك بيانات.'},
   uploadRemovedNotice: { en: 'Upload test is currently simulated client-side. A real measurement requires a server endpoint.', ar: 'اختبار الرفع حاليًا محاكاة من جانب العميل. القياس الحقيقي يتطلب نقطة نهاية على الخادم.'}
 };
 
@@ -54,5 +52,5 @@ export const translate = (key: string, lang: Language): string => {
     return translationSet[lang];
   }
   console.warn(`Translation missing for key: "${key}" in language: "${lang}"`);
-  return key; 
+  return key;
 };
