@@ -47,6 +47,16 @@ const defineNetworkingTermFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    let definition = output!.definition;
+
+    if (input.language === 'ar') {
+      // Remove trailing Latin period or Arabic full stop
+      if (definition.endsWith('.')) {
+        definition = definition.slice(0, -1);
+      } else if (definition.endsWith('۔')) {
+        definition = definition.slice(0, -1);
+      }
+    }
+    return { definition };
   }
 );
