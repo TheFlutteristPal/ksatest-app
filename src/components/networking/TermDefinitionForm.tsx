@@ -87,7 +87,7 @@ export function TermDefinitionForm() {
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-40">
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">{definition}</p>
+                <p className="text-sm leading-relaxed whitespace-pre-wrap rtl:text-right">{definition}</p>
               </ScrollArea>
             </CardContent>
           </Card>
