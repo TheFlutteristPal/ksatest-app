@@ -21,33 +21,66 @@ export default function SpeedTestPage() {
   const [uploadSpeed, setUploadSpeed] = useState(0);
   const [ping, setPing] = useState(0);
   const [selectedFileSize, setSelectedFileSize] = useState(10); // Default 10MB
-  const [isp, setIsp] = useState(t('loadingIsp')); 
+  const [isp, setIsp] = useState(t('loadingIsp'));
   const [serverLocation, setServerLocation] = useState(t('loadingServer'));
-  const [ipAddress, setIpAddress] = useState(t('loadingIpAddress'));
+  const [ipv4Address, setIpv4Address] = useState(t('loadingIpv4Address'));
+  const [ipv6Address, setIpv6Address] = useState(t('loadingIpv6Address'));
   const [testProgress, setTestProgress] = useState(0);
 
   const [history, setHistory] = useLocalStorage<SpeedTestResult[]>('speedTestHistory', []);
 
   useEffect(() => {
-    const fetchIpInfo = async () => {
+    const fetchIpData = async () => {
+      // Fetch ISP and Location from ipapi.co
       try {
-        const response = await fetch('https://ipapi.co/json/');
-        if (!response.ok) {
-          throw new Error('Failed to fetch IP info');
-        }
-        const data = await response.json();
-        setIsp(data.org || t('unavailableIsp'));
-        setServerLocation(data.city && data.country_name ? `${data.city}, ${data.country_name}` : t('unavailableServer'));
-        setIpAddress(data.ip || t('unavailableIpAddress'));
+        const ipApiResponse = await fetch('https://ipapi.co/json/');
+        if (!ipApiResponse.ok) throw new Error('Failed to fetch IP info from ipapi.co');
+        const ipApiData = await ipApiResponse.json();
+        setIsp(ipApiData.org || t('unavailableIsp'));
+        setServerLocation(ipApiData.city && ipApiData.country_name ? `${ipApiData.city}, ${ipApiData.country_name}` : t('unavailableServer'));
       } catch (error) {
-        console.error("Error fetching IP info:", error);
+        console.error("Error fetching IP info from ipapi.co:", error);
         setIsp(t('unavailableIsp'));
         setServerLocation(t('unavailableServer'));
-        setIpAddress(t('unavailableIpAddress'));
+      }
+
+      // Fetch IPv4
+      try {
+        const ipv4Response = await fetch('https://api.ipify.org?format=json');
+        if (!ipv4Response.ok) throw new Error('Failed to fetch IPv4 address');
+        const ipv4Data = await ipv4Response.json();
+        setIpv4Address(ipv4Data.ip || t('unavailableIpv4Address'));
+      } catch (error) {
+        console.error("Error fetching IPv4 address:", error);
+        setIpv4Address(t('unavailableIpv4Address'));
+      }
+
+      // Fetch IPv6
+      try {
+        const ipv6Promise = fetch('https://api64.ipify.org?format=json');
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('IPv6 fetch timeout')), 5000)); // 5s timeout
+
+        const ipv6Response = await Promise.race([ipv6Promise, timeoutPromise]) as Response;
+
+        if (!ipv6Response.ok) {
+          // Handle cases where IPv6 might not be available or other errors
+          if (ipv6Response.status === 404 || ipv6Response.status === 500) { // Common errors for unavailable service
+             console.warn("IPv6 address likely unavailable or fetch failed.");
+          } else {
+            throw new Error(`Failed to fetch IPv6 address. Status: ${ipv6Response.status}`);
+          }
+          setIpv6Address(t('unavailableIpv6Address'));
+        } else {
+          const ipv6Data = await ipv6Response.json();
+          setIpv6Address(ipv6Data.ip || t('unavailableIpv6Address'));
+        }
+      } catch (error) {
+        console.error("Error fetching IPv6 address:", error);
+        setIpv6Address(t('unavailableIpv6Address'));
       }
     };
 
-    fetchIpInfo();
+    fetchIpData();
   }, [t]);
 
   const simulateSpeedTest = () => {
@@ -113,9 +146,10 @@ export default function SpeedTestPage() {
         uploadSpeed: finalUploadSpeed,
         ping: finalPing,
         fileSize: selectedFileSize,
-        isp: isp, // Use fetched ISP
-        serverLocation: serverLocation, // Use fetched server location
-        ipAddress: ipAddress, // Use fetched IP Address
+        isp: isp,
+        serverLocation: serverLocation,
+        ipv4Address: ipv4Address,
+        ipv6Address: ipv6Address,
       };
       setHistory([newResult, ...history.slice(0, 19)]); // Keep last 20 results
     }, 5500);
@@ -160,7 +194,12 @@ export default function SpeedTestPage() {
         />
       </div>
 
-      <IspInfoDisplay isp={isp} serverLocation={serverLocation} ipAddress={ipAddress} />
+      <IspInfoDisplay 
+        isp={isp} 
+        serverLocation={serverLocation} 
+        ipv4Address={ipv4Address}
+        ipv6Address={ipv6Address}
+      />
     </div>
   );
 }

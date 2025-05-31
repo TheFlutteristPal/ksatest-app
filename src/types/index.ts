@@ -11,7 +11,8 @@ export interface SpeedTestResult {
   fileSize: number; // MB
   isp?: string;
   serverLocation?: string;
-  ipAddress?: string;
+  ipv4Address?: string;
+  ipv6Address?: string;
 }
 
 export interface Translations {
