@@ -6,7 +6,7 @@ export interface SpeedTestResult {
   id: string;
   timestamp: number;
   downloadSpeed: number; // Mbps
-  uploadSpeed: number; // Mbps
+  // uploadSpeed: number; // Mbps - Removed
   ping: number; // ms
   fileSize: number; // MB
   isp?: string;

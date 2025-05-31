@@ -23,7 +23,9 @@ export function SpeedGauge({ title, value, unit, icon, isLoading = false }: Spee
       </CardHeader>
       <CardContent>
         {isLoading ? (
-           <div className="h-12 w-full animate-pulse bg-muted rounded-md my-1"></div>
+           <div className="h-12 w-full animate-pulse bg-muted rounded-md my-1 flex items-center justify-center">
+             {/* Optionally, show a smaller spinner or loading text here if desired */}
+           </div>
         ) : (
           <div className="text-4xl font-bold text-primary font-headline">
             {value}
