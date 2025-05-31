@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { useEffect } from 'react';
 import { AppShell } from '@/components/AppShell';
 import './globals.css';
-import { APP_NAME } from '@/lib/constants';
+import { APP_NAME, DEFAULT_LANGUAGE, DEFAULT_THEME } from '@/lib/constants';
 
 // Metadata should be defined outside the component for static export
 const metadataConfig: Metadata = {
@@ -27,7 +27,11 @@ export default function RootLayout({
   }, []);
 
   return (
-    <html lang="en" dir="ltr" className="dark">
+    <html 
+      lang={DEFAULT_LANGUAGE} 
+      dir={DEFAULT_LANGUAGE === 'ar' ? 'rtl' : 'ltr'} 
+      className={DEFAULT_THEME}
+    >
       <head>
         <meta name="application-name" content={APP_NAME} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -35,10 +39,10 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content={APP_NAME} />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-config" content="/browserconfig.xml" /> 
-        <meta name="msapplication-TileColor" content="#1A1A2E" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
+        <meta name="msapplication-TileColor" content={DEFAULT_THEME === 'dark' ? '#1A1A2E' : '#F0F4FA'} /> {/* Adjusted for theme */}
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#1A1A2E" />
+        <meta name="theme-color" content={DEFAULT_THEME === 'dark' ? '#1A1A2E' : '#F0F4FA'} /> {/* Adjusted for theme */}
 
         <link rel="manifest" href="/manifest.json" />
         

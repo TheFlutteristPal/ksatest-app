@@ -39,7 +39,7 @@ export function HistoryDisplay({ history, onClearHistory }: HistoryDisplayProps)
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="font-headline">{t('testHistory')}</CardTitle>
         <Button variant="destructive" size="sm" onClick={onClearHistory} aria-label={t('clearHistory')}>
-          <Trash2 className="mr-2 h-4 w-4" /> {t('clearHistory')}
+          <Trash2 className="ltr:mr-2 rtl:ml-2 h-4 w-4" /> {t('clearHistory')}
         </Button>
       </CardHeader>
       <CardContent>
@@ -47,13 +47,41 @@ export function HistoryDisplay({ history, onClearHistory }: HistoryDisplayProps)
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead><CalendarDays className="inline-block mr-1 h-4 w-4" />{t('date')}</TableHead>
-                <TableHead className="text-center"><Download className="inline-block mr-1 h-4 w-4" />{t('download')} ({t('mbps')})</TableHead>
-                <TableHead className="text-center"><Upload className="inline-block mr-1 h-4 w-4" />{t('upload')} ({t('mbps')})</TableHead>
-                <TableHead className="text-center"><PingIcon className="inline-block mr-1 h-4 w-4" />{t('idleLatency')} ({t('ms')})</TableHead> 
-                <TableHead className="text-center"><FileBox className="inline-block mr-1 h-4 w-4" />{t('fileSize')} (MB)</TableHead>
-                <TableHead><Wifi className="inline-block mr-1 h-4 w-4" />{t('isp')}</TableHead>
-                <TableHead><Server className="inline-block mr-1 h-4 w-4" />{t('server')}</TableHead>
+                <TableHead>
+                  <div className="flex items-center">
+                    <CalendarDays className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5" />{t('date')}
+                  </div>
+                </TableHead>
+                <TableHead className="text-center">
+                  <div className="flex items-center justify-center">
+                    <Download className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5" />{t('download')} ({t('mbps')})
+                  </div>
+                </TableHead>
+                <TableHead className="text-center">
+                  <div className="flex items-center justify-center">
+                    <Upload className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5" />{t('upload')} ({t('mbps')})
+                  </div>
+                </TableHead>
+                <TableHead className="text-center">
+                  <div className="flex items-center justify-center">
+                    <PingIcon className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5" />{t('idleLatency')} ({t('ms')})
+                  </div>
+                </TableHead>
+                <TableHead className="text-center">
+                  <div className="flex items-center justify-center">
+                    <FileBox className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5" />{t('fileSize')} (MB)
+                  </div>
+                </TableHead>
+                <TableHead>
+                  <div className="flex items-center">
+                    <Wifi className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5" />{t('isp')}
+                  </div>
+                </TableHead>
+                <TableHead>
+                  <div className="flex items-center">
+                    <Server className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5" />{t('server')}
+                  </div>
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -62,7 +90,7 @@ export function HistoryDisplay({ history, onClearHistory }: HistoryDisplayProps)
                   <TableCell>{formatDate(result.timestamp)}</TableCell>
                   <TableCell className="text-center font-medium text-primary">{result.downloadSpeed}</TableCell>
                   <TableCell className="text-center font-medium text-primary">{result.uploadSpeed}</TableCell>
-                  <TableCell className="text-center font-medium text-primary">{result.idleLatency}</TableCell> 
+                  <TableCell className="text-center font-medium text-primary">{result.idleLatency}</TableCell>
                   <TableCell className="text-center">{result.fileSize}</TableCell>
                   <TableCell>{result.isp || "N/A"}</TableCell>
                   <TableCell>{result.serverLocation || "N/A"}</TableCell>
