@@ -43,7 +43,10 @@ export const translations: Translations = {
   unavailableServer: { en: 'Server location unavailable', ar: 'موقع الخادم غير متوفر' },
   unavailableIpv4Address: { en: 'IPv4 unavailable', ar: 'IPv4 غير متوفر' },
   testComplete: { en: 'Test Complete', ar: 'اكتمل الاختبار' },
-  uploadRemovedNotice: { en: 'Upload test is currently simulated client-side. A real measurement requires a server endpoint.', ar: 'اختبار الرفع حاليًا محاكاة من جانب العميل. القياس الحقيقي يتطلب نقطة نهاية على الخادم.'}
+  uploadRemovedNotice: { en: 'Upload test is currently simulated client-side. A real measurement requires a server endpoint.', ar: 'اختبار الرفع حاليًا محاكاة من جانب العميل. القياس الحقيقي يتطلب نقطة نهاية على الخادم.'},
+  offlineTitle: { en: 'You are offline', ar: 'أنت غير متصل بالإنترنت' },
+  offlineMessage: { en: "It seems you've lost your internet connection. Please check your network and try again.", ar: 'يبدو أنك فقدت الاتصال بالإنترنت. يرجى التحقق من شبكتك والمحاولة مرة أخرى.'},
+  tryAgain: { en: 'Try Again', ar: 'حاول مرة أخرى' },
 };
 
 export const translate = (key: string, lang: Language): string => {

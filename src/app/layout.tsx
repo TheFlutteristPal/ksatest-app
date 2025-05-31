@@ -1,10 +1,13 @@
 
+"use client";
 import type { Metadata } from 'next';
+import { useEffect } from 'react';
 import { AppShell } from '@/components/AppShell';
 import './globals.css';
 import { APP_NAME } from '@/lib/constants';
 
-export const metadata: Metadata = {
+// Metadata should be defined outside the component for static export
+const metadataConfig: Metadata = {
   title: APP_NAME,
   description: 'Test your internet speed and learn about networking.',
 };
@@ -14,12 +17,39 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => console.log('Service Worker registered with scope:', registration.scope))
+        .catch((error) => console.error('Service Worker registration failed:', error));
+    }
+  }, []);
+
   return (
     <html lang="en" dir="ltr" className="dark">
       <head>
+        <meta name="application-name" content={APP_NAME} />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content={APP_NAME} />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="msapplication-config" content="/browserconfig.xml" /> 
+        <meta name="msapplication-TileColor" content="#1A1A2E" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="theme-color" content="#1A1A2E" />
+
+        <link rel="manifest" href="/manifest.json" />
+        
+        <link rel="apple-touch-icon" href="https://placehold.co/180x180.png" data-ai-hint="app logo apple" />
+        <link rel="shortcut icon" href="https://placehold.co/48x48.png" data-ai-hint="favicon" />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+        <title>{String(metadataConfig.title)}</title>
+        {metadataConfig.description && <meta name="description" content={metadataConfig.description} />}
       </head>
       <body className="font-body antialiased">
         <AppShell>{children}</AppShell>

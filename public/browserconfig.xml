@@ -1,0 +1,13 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+    <msapplication>
+        <tile>
+            <square70x70logo src="https://placehold.co/70x70.png" data-ai-hint="app logo tile small"/>
+            <square150x150logo src="https://placehold.co/150x150.png" data-ai-hint="app logo tile medium"/>
+            <wide310x150logo src="https://placehold.co/310x150.png" data-ai-hint="app logo tile wide"/>
+            <square310x310logo src="https://placehold.co/310x310.png" data-ai-hint="app logo tile large"/>
+            <TileColor>#1A1A2E</TileColor>
+        </tile>
+    </msapplication>
+</browserconfig>
