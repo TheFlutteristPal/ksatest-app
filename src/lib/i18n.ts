@@ -4,12 +4,12 @@ import type { Language, Translations } from '@/types';
 export const translations: Translations = {
   appName: { en: 'ksatest', ar: 'ksatest' },
   speedTest: { en: 'Speed Test', ar: 'اختبار السرعة' },
-  history: { en: 'History', ar: 'السجل' },
+  // history: { en: 'History', ar: 'السجل' }, // History is on main page
   networkingTerms: { en: 'Networking Terms', ar: 'مصطلحات الشبكات' },
   telecomBands: { en: 'Telecom Bands', ar: 'نطاقات الاتصالات' },
   settings: { en: 'Settings', ar: 'الإعدادات' },
   download: { en: 'Download', ar: 'التحميل' },
-  // upload: { en: 'Upload', ar: 'الرفع' }, // Removed
+  upload: { en: 'Upload', ar: 'الرفع' },
   ping: { en: 'Ping', ar: 'البنق' },
   mbps: { en: 'Mbps', ar: ' ميجابت/ثانية' },
   ms: { en: 'ms', ar: 'مللي ثانية' },
@@ -37,7 +37,6 @@ export const translations: Translations = {
   light: { en: 'Light', ar: 'فاتح' },
   dark: { en: 'Dark', ar: 'داكن' },
   testingInProgress: { en: 'Testing in progress...', ar: 'جاري الاختبار...' },
-  // simulatingSpeedTest: { en: 'Simulating speed test. This is not a real measurement.', ar: 'محاكاة اختبار السرعة. هذا ليس قياسًا حقيقيًا.'}, // Removed
   loadingIsp: { en: 'Loading ISP...', ar: 'جاري تحميل مزود الخدمة...' },
   loadingServer: { en: 'Loading server location...', ar: 'جاري تحميل موقع الخادم...' },
   loadingIpv4Address: { en: 'Loading IPv4...', ar: 'جاري تحميل IPv4...' },
@@ -45,8 +44,8 @@ export const translations: Translations = {
   unavailableServer: { en: 'Server location unavailable', ar: 'موقع الخادم غير متوفر' },
   unavailableIpv4Address: { en: 'IPv4 unavailable', ar: 'IPv4 غير متوفر' },
   testComplete: { en: 'Test Complete', ar: 'اكتمل الاختبار' },
-  realTestNotice: { en: 'This test performs real data transfers to measure speed. Data usage will occur.', ar: 'يقوم هذا الاختبار بعمليات نقل بيانات حقيقية لقياس السرعة. سيتم استهلاك بيانات.'},
-  uploadRemovedNotice: { en: 'Upload test has been temporarily removed as a true client-side implementation without a dedicated server endpoint is not feasible for real measurements.', ar: 'تمت إزالة اختبار الرفع مؤقتًا نظرًا لعدم إمكانية تنفيذ اختبار حقيقي من جانب العميل بدون نقطة نهاية مخصصة على الخادم.'}
+  // realTestNotice: { en: 'This test performs real data transfers to measure speed. Data usage will occur.', ar: 'يقوم هذا الاختبار بعمليات نقل بيانات حقيقية لقياس السرعة. سيتم استهلاك بيانات.'},
+  uploadRemovedNotice: { en: 'Upload test is currently simulated client-side. A real measurement requires a server endpoint.', ar: 'اختبار الرفع حاليًا محاكاة من جانب العميل. القياس الحقيقي يتطلب نقطة نهاية على الخادم.'}
 };
 
 export const translate = (key: string, lang: Language): string => {
@@ -54,7 +53,6 @@ export const translate = (key: string, lang: Language): string => {
   if (translationSet && translationSet[lang]) {
     return translationSet[lang];
   }
-  // Fallback for missing keys or language versions to avoid crashes
   console.warn(`Translation missing for key: "${key}" in language: "${lang}"`);
-  return key; // Return the key itself as a fallback
+  return key; 
 };
