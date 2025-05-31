@@ -9,37 +9,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { NETWORKING_TERMS } from '@/lib/constants';
-import { defineNetworkingTerm, type DefineNetworkingTermOutput, type DefineNetworkingTermInput } from '@/ai/flows/define-networking-term';
 import { useLanguage } from '@/contexts/LanguageProvider';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Loader2 } from 'lucide-react';
+import { NETWORKING_TERM_DEFINITIONS } from '@/data/networking-term-definitions';
+import type { Language } from '@/types';
 
 export function TermDefinitionForm() {
   const { t, language } = useLanguage();
   const [selectedTerm, setSelectedTerm] = useState<string>('');
   const [definition, setDefinition] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleTermChange = async (term: string) => {
+  const handleTermChange = (term: string) => {
     setSelectedTerm(term);
     if (term) {
-      setIsLoading(true);
-      setDefinition(null);
-      setError(null);
-      try {
-        const input: DefineNetworkingTermInput = { term, language };
-        const result: DefineNetworkingTermOutput = await defineNetworkingTerm(input);
-        setDefinition(result.definition);
-      } catch (err) {
-        console.error("Error fetching definition:", err);
-        setError(t('noDefinitionFound'));
-      } finally {
-        setIsLoading(false);
+      const termDefinition = NETWORKING_TERM_DEFINITIONS[term];
+      if (termDefinition) {
+        setDefinition(termDefinition[language as Language]);
+      } else {
+        setDefinition(t('noDefinitionFound'));
       }
     } else {
       setDefinition(null);
@@ -68,19 +58,8 @@ export function TermDefinitionForm() {
             </SelectContent>
           </Select>
         </div>
-
-        {isLoading && (
-          <div className="flex items-center justify-center p-6 text-muted-foreground">
-            <Loader2 className="mr-2 h-5 w-5 animate-spin text-primary" />
-            {t('loadingDefinition')}
-          </div>
-        )}
-
-        {error && !isLoading && (
-          <p className="text-destructive text-center p-4">{error}</p>
-        )}
         
-        {definition && !isLoading && (
+        {definition && (
           <Card className="bg-secondary">
             <CardHeader>
               <CardTitle className="text-lg font-medium">{selectedTerm}</CardTitle>
@@ -92,7 +71,12 @@ export function TermDefinitionForm() {
             </CardContent>
           </Card>
         )}
+
+        {!definition && selectedTerm && (
+           <p className="text-muted-foreground text-center p-4">{t('noDefinitionFound')}</p>
+        )}
       </CardContent>
     </Card>
   );
 }
+
