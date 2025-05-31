@@ -11,7 +11,7 @@ import { useLanguage } from '@/contexts/LanguageProvider';
 import type { SpeedTestResult } from '@/types';
 import useLocalStorage from '@/hooks/use-local-storage';
 import { Progress } from "@/components/ui/progress";
-
+import { HistoryDisplay } from '@/components/history/HistoryDisplay';
 
 export default function SpeedTestPage() {
   const { t } = useLanguage();
@@ -128,6 +128,10 @@ export default function SpeedTestPage() {
     }, 5500);
   };
 
+  const handleClearHistory = () => {
+    setHistory([]);
+  };
+
 
   return (
     <div className="space-y-8">
@@ -164,6 +168,11 @@ export default function SpeedTestPage() {
         serverLocation={serverLocation} 
         ipv4Address={ipv4Address}
       />
+
+      <div className="space-y-6 mt-12">
+        <h2 className="text-2xl font-bold font-headline text-center mb-6">{t('testHistory')}</h2>
+        <HistoryDisplay history={history} onClearHistory={handleClearHistory} />
+      </div>
 
       <footer className="text-center text-muted-foreground text-sm py-8">
         BY Abo Yassir, All Rights Reserved 2025

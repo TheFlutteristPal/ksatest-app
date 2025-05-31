@@ -21,7 +21,6 @@ export function Header() {
         </Link>
         <nav className="flex items-center space-x-1.5 sm:space-x-3 text-sm flex-1">
           <NavLink href="/">{t('speedTest')}</NavLink>
-          <NavLink href="/history">{t('history')}</NavLink>
           <NavLink href="/networking-terms">{t('networkingTerms')}</NavLink>
           <NavLink href="/telecom-bands">{t('telecomBands')}</NavLink>
         </nav>
