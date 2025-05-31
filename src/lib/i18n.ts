@@ -9,7 +9,7 @@ export const translations: Translations = {
   settings: { en: 'Settings', ar: 'الإعدادات' },
   download: { en: 'Download', ar: 'التحميل' },
   upload: { en: 'Upload', ar: 'الرفع' },
-  idleLatency: { en: 'Idle Latency', ar: 'زمن الاستجابة (الخمول)' }, // Changed from ping
+  idleLatency: { en: 'Idle Latency (Ping)', ar: 'زمن الاستجابة (الخمول - Ping)' },
   mbps: { en: 'Mbps', ar: ' ميجابت/ثانية' },
   ms: { en: 'ms', ar: 'مللي ثانية' },
   selectFileSize: { en: 'Select File Size (MB)', ar: 'اختر حجم الملف (ميجابايت)' },
