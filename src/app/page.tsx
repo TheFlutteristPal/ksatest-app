@@ -160,14 +160,6 @@ export default function SpeedTestPage() {
     <div className="space-y-8">
       <h1 className="text-3xl font-bold text-center font-headline">{t('speedTest')}</h1>
       
-      <Alert variant="default" className="border-accent text-accent-foreground bg-accent/10">
-        <AlertTriangle className="h-4 w-4 !text-accent" />
-        <AlertTitle className="font-headline">{t('appName')}</AlertTitle>
-        <AlertDescription>
-          {t('simulatingSpeedTest')}
-        </AlertDescription>
-      </Alert>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <SpeedGauge title={t('download')} value={downloadSpeed} unit={t('mbps')} icon={<Download />} isLoading={isTesting && downloadSpeed === 0} />
         <SpeedGauge title={t('upload')} value={uploadSpeed} unit={t('mbps')} icon={<Upload />} isLoading={isTesting && uploadSpeed === 0} />
