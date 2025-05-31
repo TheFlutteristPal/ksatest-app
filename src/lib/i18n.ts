@@ -1,4 +1,5 @@
-import type { Translations } from '@/types';
+
+import type { Language, Translations } from '@/types';
 
 export const translations: Translations = {
   appName: { en: 'NetGauge Pro', ar: 'نت جيج برو' },
@@ -36,8 +37,18 @@ export const translations: Translations = {
   dark: { en: 'Dark', ar: 'داكن' },
   testingInProgress: { en: 'Testing in progress...', ar: 'جاري الاختبار...' },
   simulatingSpeedTest: { en: 'Simulating speed test. This is not a real measurement.', ar: 'محاكاة اختبار السرعة. هذا ليس قياسًا حقيقيًا.'},
+  loadingIsp: { en: 'Loading ISP...', ar: 'جاري تحميل مزود الخدمة...' },
+  loadingServer: { en: 'Loading server location...', ar: 'جاري تحميل موقع الخادم...' },
+  unavailableIsp: { en: 'ISP unavailable', ar: 'مزود الخدمة غير متوفر' },
+  unavailableServer: { en: 'Server location unavailable', ar: 'موقع الخادم غير متوفر' },
 };
 
 export const translate = (key: string, lang: Language): string => {
-  return translations[key]?.[lang] || key;
+  const translationSet = translations[key];
+  if (translationSet && translationSet[lang]) {
+    return translationSet[lang];
+  }
+  // Fallback for missing keys or language versions to avoid crashes
+  console.warn(`Translation missing for key: "${key}" in language: "${lang}"`);
+  return key;
 };

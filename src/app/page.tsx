@@ -21,11 +21,31 @@ export default function SpeedTestPage() {
   const [uploadSpeed, setUploadSpeed] = useState(0);
   const [ping, setPing] = useState(0);
   const [selectedFileSize, setSelectedFileSize] = useState(10); // Default 10MB
-  const [isp, setIsp] = useState("Simulated ISP"); // Placeholder
-  const [serverLocation, setServerLocation] = useState("Simulated Server, KSA"); // Placeholder
+  const [isp, setIsp] = useState(t('loadingIsp')); 
+  const [serverLocation, setServerLocation] = useState(t('loadingServer'));
   const [testProgress, setTestProgress] = useState(0);
 
   const [history, setHistory] = useLocalStorage<SpeedTestResult[]>('speedTestHistory', []);
+
+  useEffect(() => {
+    const fetchIpInfo = async () => {
+      try {
+        const response = await fetch('https://ipapi.co/json/');
+        if (!response.ok) {
+          throw new Error('Failed to fetch IP info');
+        }
+        const data = await response.json();
+        setIsp(data.org || t('unavailableIsp'));
+        setServerLocation(data.city && data.country_name ? `${data.city}, ${data.country_name}` : t('unavailableServer'));
+      } catch (error) {
+        console.error("Error fetching IP info:", error);
+        setIsp(t('unavailableIsp'));
+        setServerLocation(t('unavailableServer'));
+      }
+    };
+
+    fetchIpInfo();
+  }, [t]);
 
   const simulateSpeedTest = () => {
     setIsTesting(true);
@@ -90,8 +110,8 @@ export default function SpeedTestPage() {
         uploadSpeed: finalUploadSpeed,
         ping: finalPing,
         fileSize: selectedFileSize,
-        isp: isp,
-        serverLocation: serverLocation,
+        isp: isp, // Use fetched ISP
+        serverLocation: serverLocation, // Use fetched server location
       };
       setHistory([newResult, ...history.slice(0, 19)]); // Keep last 20 results
     }, 5500);
