@@ -12,6 +12,7 @@ import type { SpeedTestResult } from '@/types';
 import useLocalStorage from '@/hooks/use-local-storage';
 import { Progress } from "@/components/ui/progress";
 import { HistoryDisplay } from '@/components/history/HistoryDisplay';
+import { FILE_SIZES } from '@/lib/constants'; // Import FILE_SIZES if needed for mapping
 
 export default function SpeedTestPage() {
   const { t } = useLanguage();
@@ -64,68 +65,91 @@ export default function SpeedTestPage() {
     setPing(0);
     setTestProgress(0);
 
+    const stepsPerFileSize: { [size: number]: number } = {
+      1: 10,    // 1s active animation
+      5: 12,    // 1.2s active animation
+      10: 15,   // 1.5s active animation
+      50: 25,   // 2.5s active animation
+      100: 35   // 3.5s active animation
+    };
+    const defaultSteps = 15; // Fallback for any unmapped size
+    const numberOfSteps = stepsPerFileSize[selectedFileSize] || defaultSteps;
+    const animationIntervalMs = 100;
+
+    const pingDuration = 500;
+    const delayBetweenPhases = 500;
+
+    const activeDownloadDuration = numberOfSteps * animationIntervalMs;
+    const activeUploadDuration = numberOfSteps * animationIntervalMs;
+
+    const downloadStartTime = pingDuration + delayBetweenPhases;
+    const uploadStartTime = downloadStartTime + activeDownloadDuration + delayBetweenPhases;
+    const testEndTime = uploadStartTime + activeUploadDuration + delayBetweenPhases;
+
     // Simulate Ping
     setTimeout(() => {
-      setPing(Math.floor(Math.random() * 50) + 10); // 10-60 ms
+      const currentPing = Math.floor(Math.random() * 50) + 10; // 10-60 ms
+      setPing(currentPing);
       setTestProgress(20);
-    }, 500);
+    }, pingDuration);
 
     // Simulate Download
     setTimeout(() => {
-      const dlSpeed = parseFloat((Math.random() * 100 + 5).toFixed(2)); // 5-105 Mbps
-      let currentDl = 0;
+      const targetDlSpeed = parseFloat((Math.random() * 100 + 5).toFixed(2)); // 5-105 Mbps
+      let stepsDone = 0;
       const dlInterval = setInterval(() => {
-        currentDl += dlSpeed / 10;
-        if (currentDl >= dlSpeed) {
-          setDownloadSpeed(dlSpeed);
+        stepsDone++;
+        const currentDlDisplay = (targetDlSpeed / numberOfSteps) * stepsDone;
+        setDownloadSpeed(parseFloat(currentDlDisplay.toFixed(2)));
+        // Progress: Ping is 20%. Download is next 40% (20 to 60).
+        setTestProgress(prev => Math.min(60, 20 + (40 * stepsDone / numberOfSteps)));
+
+        if (stepsDone >= numberOfSteps) {
+          setDownloadSpeed(targetDlSpeed); // Ensure final target speed is set for display
+          setTestProgress(60); // Correct progress
           clearInterval(dlInterval);
-          setTestProgress(60);
-        } else {
-          setDownloadSpeed(parseFloat(currentDl.toFixed(2)));
         }
-      }, 100);
-    }, 1500);
+      }, animationIntervalMs);
+    }, downloadStartTime);
     
     // Simulate Upload
     setTimeout(() => {
-      const ulSpeed = parseFloat((Math.random() * 50 + 2).toFixed(2)); // 2-52 Mbps
-      let currentUl = 0;
+      const targetUlSpeed = parseFloat((Math.random() * 50 + 2).toFixed(2)); // 2-52 Mbps
+      let stepsDone = 0;
       const ulInterval = setInterval(() => {
-        currentUl += ulSpeed / 10;
-        if (currentUl >= ulSpeed) {
-          setUploadSpeed(ulSpeed);
+        stepsDone++;
+        const currentUlDisplay = (targetUlSpeed / numberOfSteps) * stepsDone;
+        setUploadSpeed(parseFloat(currentUlDisplay.toFixed(2)));
+        // Progress: Download ended at 60%. Upload is next 40% (60 to 100).
+        setTestProgress(prev => Math.min(100, 60 + (40 * stepsDone / numberOfSteps)));
+        
+        if (stepsDone >= numberOfSteps) {
+          setUploadSpeed(targetUlSpeed); // Ensure final target speed is set for display
+          setTestProgress(100); // Correct progress
           clearInterval(ulInterval);
-          setTestProgress(100);
-        } else {
-          setUploadSpeed(parseFloat(currentUl.toFixed(2)));
         }
-      }, 100);
-    }, 3500);
+      }, animationIntervalMs);
+    }, uploadStartTime);
 
     // Finish test
     setTimeout(() => {
       setIsTesting(false);
-      const finalDownloadSpeed = parseFloat((Math.random() * 100 + 5).toFixed(2));
-      const finalUploadSpeed = parseFloat((Math.random() * 50 + 2).toFixed(2));
-      const finalPing = Math.floor(Math.random() * 50) + 10;
-      
-      setDownloadSpeed(finalDownloadSpeed);
-      setUploadSpeed(finalUploadSpeed);
-      setPing(finalPing);
-
+      // The `ping`, `downloadSpeed`, and `uploadSpeed` state variables now hold the 
+      // values set at the end of their respective animation phases.
+      // These are the values we want to record in history.
       const newResult: SpeedTestResult = {
         id: new Date().toISOString(),
         timestamp: Date.now(),
-        downloadSpeed: finalDownloadSpeed,
-        uploadSpeed: finalUploadSpeed,
-        ping: finalPing,
+        downloadSpeed: downloadSpeed, // Current state value
+        uploadSpeed: uploadSpeed,   // Current state value
+        ping: ping,                 // Current state value
         fileSize: selectedFileSize,
         isp: isp,
         serverLocation: serverLocation,
         ipv4Address: ipv4Address,
       };
       setHistory([newResult, ...history.slice(0, 19)]); // Keep last 20 results
-    }, 5500);
+    }, testEndTime);
   };
 
   const handleClearHistory = () => {
@@ -138,9 +162,9 @@ export default function SpeedTestPage() {
       <h1 className="text-3xl font-bold text-center font-headline">{t('speedTest')}</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <SpeedGauge title={t('download')} value={downloadSpeed} unit={t('mbps')} icon={<Download />} isLoading={isTesting && downloadSpeed === 0} />
-        <SpeedGauge title={t('upload')} value={uploadSpeed} unit={t('mbps')} icon={<Upload />} isLoading={isTesting && uploadSpeed === 0} />
-        <SpeedGauge title={t('ping')} value={ping} unit={t('ms')} icon={<PingIcon />} isLoading={isTesting && ping === 0} />
+        <SpeedGauge title={t('download')} value={downloadSpeed} unit={t('mbps')} icon={<Download />} isLoading={isTesting && downloadSpeed === 0 && testProgress < 60} />
+        <SpeedGauge title={t('upload')} value={uploadSpeed} unit={t('mbps')} icon={<Upload />} isLoading={isTesting && uploadSpeed === 0 && testProgress < 100 && testProgress >= 60} />
+        <SpeedGauge title={t('ping')} value={ping} unit={t('ms')} icon={<PingIcon />} isLoading={isTesting && ping === 0 && testProgress < 20} />
       </div>
       
       {isTesting && (
@@ -180,3 +204,4 @@ export default function SpeedTestPage() {
     </div>
   );
 }
+
