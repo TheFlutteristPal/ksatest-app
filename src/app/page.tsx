@@ -166,7 +166,7 @@ export default function SpeedTestPage() {
       />
 
       <footer className="text-center text-muted-foreground text-sm py-8">
-        BY The Flutterist, All Rights Reserved.
+        BY Abo Yassir, All Rights Reserved 2025
       </footer>
     </div>
   );
