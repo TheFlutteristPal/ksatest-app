@@ -222,11 +222,6 @@ export default function SpeedTestPage() {
         ipv4Address={ipv4Address}
       />
       
-      <div className="bg-card p-4 rounded-lg shadow-md text-sm text-muted-foreground">
-        <p>{t('realTestNotice')}</p> 
-        <p>{t('uploadRemovedNotice')}</p>
-      </div>
-
 
       <div className="space-y-6 mt-12">
         <h2 className="text-2xl font-bold font-headline text-center mb-6">{t('testHistory')}</h2>
