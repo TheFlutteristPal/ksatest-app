@@ -10,7 +10,6 @@ import { StartTestButton } from '@/components/speed-test/StartTestButton';
 import { useLanguage } from '@/contexts/LanguageProvider';
 import type { SpeedTestResult } from '@/types';
 import useLocalStorage from '@/hooks/use-local-storage';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 
 
@@ -165,6 +164,10 @@ export default function SpeedTestPage() {
         serverLocation={serverLocation} 
         ipv4Address={ipv4Address}
       />
+
+      <footer className="text-center text-muted-foreground text-sm py-8">
+        BY The Flutterist, All Rights Reserved.
+      </footer>
     </div>
   );
 }
