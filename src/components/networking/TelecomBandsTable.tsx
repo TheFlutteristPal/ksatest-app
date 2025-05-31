@@ -28,10 +28,10 @@ export function TelecomBandsTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead><Wifi className="inline-block mr-1 h-4 w-4" />{t('provider')}</TableHead>
-                <TableHead><Signal className="inline-block mr-1 h-4 w-4" />{t('band')}</TableHead>
-                <TableHead><Gauge className="inline-block mr-1 h-4 w-4" />{t('frequency')}</TableHead>
-                <TableHead><Zap className="inline-block mr-1 h-4 w-4" />{t('type')}</TableHead>
+                <TableHead><Wifi className="inline-block ltr:mr-1 rtl:ml-1 h-4 w-4" />{t('provider')}</TableHead>
+                <TableHead><Signal className="inline-block ltr:mr-1 rtl:ml-1 h-4 w-4" />{t('band')}</TableHead>
+                <TableHead><Gauge className="inline-block ltr:mr-1 rtl:ml-1 h-4 w-4" />{t('frequency')}</TableHead>
+                <TableHead><Zap className="inline-block ltr:mr-1 rtl:ml-1 h-4 w-4" />{t('type')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
