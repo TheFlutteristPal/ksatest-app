@@ -24,7 +24,6 @@ export default function SpeedTestPage() {
   const [isp, setIsp] = useState(t('loadingIsp'));
   const [serverLocation, setServerLocation] = useState(t('loadingServer'));
   const [ipv4Address, setIpv4Address] = useState(t('loadingIpv4Address'));
-  const [ipv6Address, setIpv6Address] = useState(t('loadingIpv6Address'));
   const [testProgress, setTestProgress] = useState(0);
 
   const [history, setHistory] = useLocalStorage<SpeedTestResult[]>('speedTestHistory', []);
@@ -53,30 +52,6 @@ export default function SpeedTestPage() {
       } catch (error) {
         console.error("Error fetching IPv4 address:", error);
         setIpv4Address(t('unavailableIpv4Address'));
-      }
-
-      // Fetch IPv6
-      try {
-        const ipv6Promise = fetch('https://api64.ipify.org?format=json');
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('IPv6 fetch timeout')), 5000)); // 5s timeout
-
-        const ipv6Response = await Promise.race([ipv6Promise, timeoutPromise]) as Response;
-
-        if (!ipv6Response.ok) {
-          // Handle cases where IPv6 might not be available or other errors
-          if (ipv6Response.status === 404 || ipv6Response.status === 500) { // Common errors for unavailable service
-             console.warn("IPv6 address likely unavailable or fetch failed.");
-          } else {
-            throw new Error(`Failed to fetch IPv6 address. Status: ${ipv6Response.status}`);
-          }
-          setIpv6Address(t('unavailableIpv6Address'));
-        } else {
-          const ipv6Data = await ipv6Response.json();
-          setIpv6Address(ipv6Data.ip || t('unavailableIpv6Address'));
-        }
-      } catch (error) {
-        console.error("Error fetching IPv6 address:", error);
-        setIpv6Address(t('unavailableIpv6Address'));
       }
     };
 
@@ -149,7 +124,6 @@ export default function SpeedTestPage() {
         isp: isp,
         serverLocation: serverLocation,
         ipv4Address: ipv4Address,
-        ipv6Address: ipv6Address,
       };
       setHistory([newResult, ...history.slice(0, 19)]); // Keep last 20 results
     }, 5500);
@@ -190,7 +164,6 @@ export default function SpeedTestPage() {
         isp={isp} 
         serverLocation={serverLocation} 
         ipv4Address={ipv4Address}
-        ipv6Address={ipv6Address}
       />
     </div>
   );

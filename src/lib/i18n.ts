@@ -2,7 +2,7 @@
 import type { Language, Translations } from '@/types';
 
 export const translations: Translations = {
-  appName: { en: 'NetGauge Pro', ar: 'نت جيج برو' },
+  appName: { en: 'ksatest', ar: 'ksatest' },
   speedTest: { en: 'Speed Test', ar: 'اختبار السرعة' },
   history: { en: 'History', ar: 'السجل' },
   networkingTerms: { en: 'Networking Terms', ar: 'مصطلحات الشبكات' },
@@ -17,9 +17,7 @@ export const translations: Translations = {
   startTest: { en: 'Start Test', ar: 'ابدأ الاختبار' },
   isp: { en: 'ISP', ar: 'مزود الخدمة' },
   server: { en: 'Server', ar: 'الخادم' },
-  // Removed ipAddress, replaced by ipv4AddressLabel and ipv6AddressLabel
   ipv4AddressLabel: { en: 'IPv4 Address', ar: 'عنوان IPv4' },
-  ipv6AddressLabel: { en: 'IPv6 Address', ar: 'عنوان IPv6' },
   selectTerm: { en: 'Select a term', ar: 'اختر مصطلحًا' },
   definition: { en: 'Definition', ar: 'التعريف' },
   loadingDefinition: { en: 'Loading definition...', ar: 'جاري تحميل التعريف...' },
@@ -42,14 +40,10 @@ export const translations: Translations = {
   simulatingSpeedTest: { en: 'Simulating speed test. This is not a real measurement.', ar: 'محاكاة اختبار السرعة. هذا ليس قياسًا حقيقيًا.'},
   loadingIsp: { en: 'Loading ISP...', ar: 'جاري تحميل مزود الخدمة...' },
   loadingServer: { en: 'Loading server location...', ar: 'جاري تحميل موقع الخادم...' },
-  // Removed loadingIpAddress, replaced by specific loading states
   loadingIpv4Address: { en: 'Loading IPv4...', ar: 'جاري تحميل IPv4...' },
-  loadingIpv6Address: { en: 'Loading IPv6...', ar: 'جاري تحميل IPv6...' },
   unavailableIsp: { en: 'ISP unavailable', ar: 'مزود الخدمة غير متوفر' },
   unavailableServer: { en: 'Server location unavailable', ar: 'موقع الخادم غير متوفر' },
-  // Removed unavailableIpAddress, replaced by specific unavailable states
   unavailableIpv4Address: { en: 'IPv4 unavailable', ar: 'IPv4 غير متوفر' },
-  unavailableIpv6Address: { en: 'IPv6 unavailable', ar: 'IPv6 غير متوفر' },
 };
 
 export const translate = (key: string, lang: Language): string => {

@@ -12,7 +12,6 @@ export interface SpeedTestResult {
   isp?: string;
   serverLocation?: string;
   ipv4Address?: string;
-  ipv6Address?: string;
 }
 
 export interface Translations {

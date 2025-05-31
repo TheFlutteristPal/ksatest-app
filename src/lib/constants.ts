@@ -1,3 +1,4 @@
+
 import type { Language, Theme } from '@/types';
 
 export const NETWORKING_TERMS: string[] = [
@@ -18,4 +19,4 @@ export const LANGUAGES: { code: Language; name: string }[] = [
 export const DEFAULT_LANGUAGE: Language = 'ar';
 export const DEFAULT_THEME: Theme = 'dark';
 
-export const APP_NAME = "NetGauge Pro";
+export const APP_NAME = "ksatest";
