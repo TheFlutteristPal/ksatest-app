@@ -23,6 +23,7 @@ export default function SpeedTestPage() {
   const [selectedFileSize, setSelectedFileSize] = useState(10); // Default 10MB
   const [isp, setIsp] = useState(t('loadingIsp')); 
   const [serverLocation, setServerLocation] = useState(t('loadingServer'));
+  const [ipAddress, setIpAddress] = useState(t('loadingIpAddress'));
   const [testProgress, setTestProgress] = useState(0);
 
   const [history, setHistory] = useLocalStorage<SpeedTestResult[]>('speedTestHistory', []);
@@ -37,10 +38,12 @@ export default function SpeedTestPage() {
         const data = await response.json();
         setIsp(data.org || t('unavailableIsp'));
         setServerLocation(data.city && data.country_name ? `${data.city}, ${data.country_name}` : t('unavailableServer'));
+        setIpAddress(data.ip || t('unavailableIpAddress'));
       } catch (error) {
         console.error("Error fetching IP info:", error);
         setIsp(t('unavailableIsp'));
         setServerLocation(t('unavailableServer'));
+        setIpAddress(t('unavailableIpAddress'));
       }
     };
 
@@ -112,6 +115,7 @@ export default function SpeedTestPage() {
         fileSize: selectedFileSize,
         isp: isp, // Use fetched ISP
         serverLocation: serverLocation, // Use fetched server location
+        ipAddress: ipAddress, // Use fetched IP Address
       };
       setHistory([newResult, ...history.slice(0, 19)]); // Keep last 20 results
     }, 5500);
@@ -156,7 +160,7 @@ export default function SpeedTestPage() {
         />
       </div>
 
-      <IspInfoDisplay isp={isp} serverLocation={serverLocation} />
+      <IspInfoDisplay isp={isp} serverLocation={serverLocation} ipAddress={ipAddress} />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+
 export type Language = 'en' | 'ar';
 export type Theme = 'light' | 'dark';
 
@@ -10,6 +11,7 @@ export interface SpeedTestResult {
   fileSize: number; // MB
   isp?: string;
   serverLocation?: string;
+  ipAddress?: string;
 }
 
 export interface Translations {

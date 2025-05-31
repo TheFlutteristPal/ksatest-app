@@ -17,6 +17,7 @@ export const translations: Translations = {
   startTest: { en: 'Start Test', ar: 'ابدأ الاختبار' },
   isp: { en: 'ISP', ar: 'مزود الخدمة' },
   server: { en: 'Server', ar: 'الخادم' },
+  ipAddress: { en: 'IP Address', ar: 'عنوان IP' },
   selectTerm: { en: 'Select a term', ar: 'اختر مصطلحًا' },
   definition: { en: 'Definition', ar: 'التعريف' },
   loadingDefinition: { en: 'Loading definition...', ar: 'جاري تحميل التعريف...' },
@@ -39,8 +40,10 @@ export const translations: Translations = {
   simulatingSpeedTest: { en: 'Simulating speed test. This is not a real measurement.', ar: 'محاكاة اختبار السرعة. هذا ليس قياسًا حقيقيًا.'},
   loadingIsp: { en: 'Loading ISP...', ar: 'جاري تحميل مزود الخدمة...' },
   loadingServer: { en: 'Loading server location...', ar: 'جاري تحميل موقع الخادم...' },
+  loadingIpAddress: { en: 'Loading IP address...', ar: 'جاري تحميل عنوان IP...' },
   unavailableIsp: { en: 'ISP unavailable', ar: 'مزود الخدمة غير متوفر' },
   unavailableServer: { en: 'Server location unavailable', ar: 'موقع الخادم غير متوفر' },
+  unavailableIpAddress: { en: 'IP address unavailable', ar: 'عنوان IP غير متوفر' },
 };
 
 export const translate = (key: string, lang: Language): string => {
