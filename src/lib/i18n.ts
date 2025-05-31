@@ -47,6 +47,10 @@ export const translations: Translations = {
   offlineTitle: { en: 'You are offline', ar: 'أنت غير متصل بالإنترنت' },
   offlineMessage: { en: "It seems you've lost your internet connection. Please check your network and try again.", ar: 'يبدو أنك فقدت الاتصال بالإنترنت. يرجى التحقق من شبكتك والمحاولة مرة أخرى.'},
   tryAgain: { en: 'Try Again', ar: 'حاول مرة أخرى' },
+  installApp: { en: 'Install App', ar: 'تثبيت التطبيق' },
+  changeLanguage: { en: 'Change language', ar: 'تغيير اللغة'},
+  switchToDarkTheme: { en: 'Switch to dark theme', ar: 'التحويل إلى المظهر الداكن'},
+  switchToLightTheme: { en: 'Switch to light theme', ar: 'التحويل إلى المظهر الفاتح'},
 };
 
 export const translate = (key: string, lang: Language): string => {
@@ -55,5 +59,9 @@ export const translate = (key: string, lang: Language): string => {
     return translationSet[lang];
   }
   console.warn(`Translation missing for key: "${key}" in language: "${lang}"`);
-  return key;
+  // Fallback to English if the specific language translation is missing for the key
+  if (translations[key] && translations[key]['en']) {
+    return translations[key]['en'];
+  }
+  return key; // Return the key itself if no English fallback either
 };
