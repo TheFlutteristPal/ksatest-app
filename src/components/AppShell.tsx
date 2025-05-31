@@ -13,7 +13,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <LanguageProvider>
         <div className="min-h-screen flex flex-col">
           <Header />
-          <main className="flex-grow container py-8">
+          <main className="flex-grow container mx-auto py-8">
             {children}
           </main>
            <Toaster />
