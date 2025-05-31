@@ -13,7 +13,7 @@ import useLocalStorage from '@/hooks/use-local-storage';
 import { Progress } from "@/components/ui/progress";
 import { HistoryDisplay } from '@/components/history/HistoryDisplay';
 
-const PING_SAMPLES = 5;
+const PING_SAMPLES = 10; // Increased from 5
 const CLOUDFLARE_SPEED_TEST_BASE_URL = 'https://speed.cloudflare.com';
 
 export default function SpeedTestPage() {
@@ -64,16 +64,17 @@ export default function SpeedTestPage() {
 
   const measurePing = async () => {
     setCurrentTestPhase(t('ping'));
-    setTestProgress(0); 
+    setTestProgress(0);
     let totalTime = 0;
-    const pingUrl = `${CLOUDFLARE_SPEED_TEST_BASE_URL}/__down?bytes=0&_=${Date.now()}`;
+    const basePingUrl = `${CLOUDFLARE_SPEED_TEST_BASE_URL}/__down?bytes=0`;
 
     for (let i = 0; i < PING_SAMPLES; i++) {
+      const pingUrlWithCacheBuster = `${basePingUrl}&_=${Date.now()}-${i}`; // Unique cache buster for each request
       const startTime = performance.now();
       try {
-        await fetch(pingUrl, {cache: 'no-store', mode: 'cors'});
+        await fetch(pingUrlWithCacheBuster, {cache: 'no-store', mode: 'cors'});
       } catch (e) {
-        console.warn("Ping sample failed:", e);
+        console.warn(`Ping sample ${i + 1} failed:`, e);
       }
       totalTime += performance.now() - startTime;
       setTestProgress(Math.round(((i + 1) / PING_SAMPLES) * 15)); // Ping contributes up to 15%
@@ -182,9 +183,9 @@ export default function SpeedTestPage() {
 
     try {
       measuredPing = await measurePing();
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise(resolve => setTimeout(resolve, 300)); // Small delay between phases
       measuredDownloadSpeed = await measureDownloadSpeed(selectedFileSize);
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise(resolve => setTimeout(resolve, 300)); // Small delay between phases
       measuredUploadSpeed = await measureUploadSpeed(selectedFileSize); // This is simulated
       
       const newResult: SpeedTestResult = {
@@ -202,6 +203,7 @@ export default function SpeedTestPage() {
 
     } catch (error) {
       console.error("Speed test failed:", error);
+      // Optionally, display an error message to the user
     } finally {
       setIsTesting(false);
       setCurrentTestPhase(t('testComplete') || 'Test Complete');
@@ -228,9 +230,10 @@ export default function SpeedTestPage() {
         <div className="my-4">
           <Progress 
             value={
+              currentTestPhase === t('ping') ? testProgress : // Ping uses overall testProgress for its phase
               currentTestPhase === t('download') ? downloadProgress : 
               currentTestPhase === t('upload') ? uploadProgress : 
-              testProgress 
+              testProgress // Fallback to overall testProgress
             } 
             className="w-full h-3 [&>div]:bg-accent" 
           />
