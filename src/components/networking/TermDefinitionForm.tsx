@@ -13,13 +13,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { NETWORKING_TERMS } from '@/lib/constants';
-import { defineNetworkingTerm, type DefineNetworkingTermOutput } from '@/ai/flows/define-networking-term';
+import { defineNetworkingTerm, type DefineNetworkingTermOutput, type DefineNetworkingTermInput } from '@/ai/flows/define-networking-term';
 import { useLanguage } from '@/contexts/LanguageProvider';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Loader2 } from 'lucide-react';
 
 export function TermDefinitionForm() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [selectedTerm, setSelectedTerm] = useState<string>('');
   const [definition, setDefinition] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,8 @@ export function TermDefinitionForm() {
       setDefinition(null);
       setError(null);
       try {
-        const result: DefineNetworkingTermOutput = await defineNetworkingTerm({ term });
+        const input: DefineNetworkingTermInput = { term, language };
+        const result: DefineNetworkingTermOutput = await defineNetworkingTerm(input);
         setDefinition(result.definition);
       } catch (err) {
         console.error("Error fetching definition:", err);
