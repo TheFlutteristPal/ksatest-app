@@ -10,14 +10,21 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://placehold.co/192x192.png",
-      "sizes": "192x192",
+      "src": "src/components/ui/32.png",
+      "sizes": "32x32",
       "type": "image/png",
       "purpose": "any maskable",
-      "data-ai-hint": "app logo"
+      "data-ai-hint": "app icon"
     },
     {
-      "src": "https://placehold.co/512x512.png",
+      "src": "src/components/ui/196.png",
+      "sizes": "196x196",
+      "type": "image/png",
+      "purpose": "any maskable",
+      "data-ai-hint": "app icon"
+    },
+    {
+      "src": "src/components/ui/512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable",
